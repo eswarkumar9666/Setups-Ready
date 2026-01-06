@@ -1,0 +1,13 @@
+
+Steps to create certificate. 
+
+lets create a folder: mkdir mustafa-user && cd mustafa-user
+Generate a key using openssl : openssl genrsa -out mustafa.key 2048
+Generate a Client Sign Request (CSR) : openssl req -new -key mustafa.key -out mustafa.csr -subj "/CN=mustafa/O=group1"
+Generate the certificate (CRT):  openssl x509 -req -in mustafa.csr -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -out mustafa.crt -days 500
+Steps to create user. 
+lets create a user: kubectl config set-credentials mustafa --client-certificate=mustafa.crt --client-key=mustafa.key
+
+
+Set a context entry in kubeconfig: kubectl config set-context my-context --cluster=minikube --user=mustafa
+Context is used to switch the users in K8s cluster. Because in K8s we cant switch using users, we will add users to context and we will use context to switch b/w users. 
